@@ -51,7 +51,7 @@ queue.process(async function (job, done) {
     try {
         await app.client.chat.postMessage({
             channel: job.data.channelId,
-            text: `💿 Now playing *${job.data.title}* by *${job.data.author}*`
+            text: `💿 Now playing *${job.data.title}* by *${job.data.author}*. ${job.data.background ? "It will play around 40db." : ""}`
         })
         if (job.data.channelId) {
             await (await fetch(`http://localhost:${process.env.BROWSER_PORT || 3000}/move?` + new URLSearchParams({
@@ -67,7 +67,11 @@ queue.process(async function (job, done) {
         return done(null, true);
     }
 });
-
+app.command('/skip', async ({ ack, command, respond, say, body }) => {
+    await ack();
+    global.stopped = true;
+    await respond(":spin-loading: Skipping, hold on.")
+})
 app.command('/stop', async ({ ack, command, respond, say, body }) => {
     await ack();
     try {
@@ -110,7 +114,7 @@ app.command('/queue', async ({ ack, command, respond, say, body }) => {
 
     }
     queue.getJobs('waiting').then(async (jobs) => {
-        const q = jobs.map((job, i) => `*#${i + 1}*: *${job.data.title}* by ${job.data.title} (<#${job.data.author}>)`)
+        const q = jobs.map((job, i) => `*#${i + 1}*: *${job.data.title}* by ${job.data.title} (<#${job.data.channelId}>). ${job.data.background ? "It will play around 40db." : ""}`).reverse()
         if (q.length == 0) return await respond(":x: There's nothing in the queue.")
         await respond(q.join("\n"))
     });
@@ -166,7 +170,8 @@ app.command('/play', async ({ ack, command, respond, say, body }) => {
                 huddle: `https://app.slack.com/client/${body.team_id}/${body.channel_id}?open=start_huddle`, file: `/tmp/${id}.mp3`,
                 channelId: body.channel_id,
                 title: metadata.videoDetails.title,
-                author: metadata.videoDetails.author.name
+                author: metadata.videoDetails.author.name,
+                background: false
             });
             job
                 .retries(0)
@@ -224,12 +229,13 @@ app.command('/bplay', async ({ ack, command, respond, say, body }) => {
                 huddle: `https://app.slack.com/client/${body.team_id}/${body.channel_id}?open=start_huddle`, file: `/tmp/${id}.mp3`,
                 channelId: body.channel_id,
                 title: metadata.videoDetails.title,
-                author: metadata.videoDetails.author.name
+                author: metadata.videoDetails.author.name,
+                background: true
             });
             job.save();
             await app.client.chat.postMessage({
                 channel: body.channel_id,
-                text: `💿 <@${body.user_id}> added *${metadata.videoDetails.title}* by *${metadata.videoDetails.author.name}* to the queue!`
+                text: `💿🤫 <@${body.user_id}> added *${metadata.videoDetails.title}* by *${metadata.videoDetails.author.name}* to the queue!`
             })
         } catch (error) {
             console.error("Error during conversion:", error);
