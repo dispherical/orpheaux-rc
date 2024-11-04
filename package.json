@@ -1,0 +1,20 @@
+{
+  "name": "orpheaux-rc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "start": "node index.js &\nnode stream.js"
+  },
+  "dependencies": {
+    "@distube/ytdl-core": "^4.15.1",
+    "@slack/bolt": "^4.1.0",
+    "bee-queue": "^1.7.1",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.1",
+    "nodeshout-koffi": "^2.0.0",
+    "puppeteer": "^23.6.1",
+    "redis": "^4.7.0",
+    "url-regex": "^5.0.0"
+  }
+}

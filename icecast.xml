@@ -1,0 +1,36 @@
+<icecast>
+    <limits>
+        <sources>5</sources>
+        <header-timeout>10</header-timeout>
+        <source-timeout>9999999999999999</source-timeout>
+    </limits>
+    <authentication>
+        <source-password>hackme</source-password>
+        <relay-password>hackme</relay-password>
+        <admin-user>admin</admin-user>
+        <admin-password>hackme</admin-password>
+    </authentication>
+    <hostname>localhost</hostname>
+    <listen-socket>
+        <port>8000</port>
+    </listen-socket>
+    <paths>
+        <logdir>/tmp</logdir>
+        <webroot>/orpheaux-rc</webroot>
+        <adminroot>/admin</adminroot>
+        <alias source="/" destination="/status.xsl"/>
+    </paths>
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <loglevel>information</loglevel>
+    </logging>
+    <http-headers>
+        <header name="Access-Control-Allow-Origin" value="*" />
+        <header type="cors" name="Access-Control-Allow-Headers" />
+        <header type="cors" name="Access-Control-Expose-Headers" />
+    </http-headers>
+    <mount>
+        <mount-name>/stream.mp3</mount-name>
+    </mount>
+</icecast>
