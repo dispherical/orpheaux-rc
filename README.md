@@ -10,7 +10,7 @@ A cross-platform Slack music huddle playing bot
 5. Adjust the icecast/redis ports as needed in index.js
 6. `npm start`!
 
-## Diffrences
+## Differences
 |                    	| Orpheaux                                	| Orpheaux-ng                    	| Orpheaux-rc (this)                          	|
 |--------------------	|--------------------------------------------	|--------------------------------	|---------------------------------------	|
 | Docker Support     	| ❌                                          	| ✅                              	| ❌                                     	|
